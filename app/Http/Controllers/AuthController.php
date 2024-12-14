@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     // تسجيل دخول المسؤول
@@ -19,17 +20,20 @@ class AuthController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Login successful.']);
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['message' => 'Invalid credentials.'], 401);
         }
 
-        return response()->json(['message' => 'Invalid credentials.'], 401);
+        return response()->json([
+            'message' => 'Login successful.',
+            'token' => $token,
+        ]);
     }
 
     // تسجيل الخروج
     public function logout()
     {
-        Auth::logout();
+        JWTAuth::invalidate(JWTAuth::getToken());
         return response()->json(['message' => 'Logged out successfully.']);
     }
 }
