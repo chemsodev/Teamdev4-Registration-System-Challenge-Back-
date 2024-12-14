@@ -25,7 +25,6 @@ class AuthController extends Controller
         $admin = Admin::where('username', $request->username)->first();
 
         if ($admin && Hash::check($request->password, $admin->password)) {
-            Auth::login($admin);
 
             $token = JWTAuth::fromUser($admin);
 
