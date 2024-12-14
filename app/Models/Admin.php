@@ -15,6 +15,7 @@ class Admin extends Authenticatable
         'username',
         'password',
     ];
-
+    
+    public $timestamps = false; 
     // لا تحتاج إلى `timestamps`  مفعلة  افتراضي
 }
