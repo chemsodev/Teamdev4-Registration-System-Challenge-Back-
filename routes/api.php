@@ -19,6 +19,7 @@ Route::get('/admin/teams', [AdminController::class, 'getAllTeams']);
 Route::delete('/admin/participants/{id}', [AdminController::class, 'deleteParticipant']);
 Route::delete('/admin/teams/{id}', [AdminController::class, 'deleteTeam']);
 Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
+Route::post('/admin/register', [AdminController::class, 'register']);
 
 // Auth Routes
 Route::post('/auth/login', [AuthController::class, 'login']);

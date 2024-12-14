@@ -15,6 +15,7 @@ use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+
 class RegistrationController extends Controller
 {
     // Register Team Leader

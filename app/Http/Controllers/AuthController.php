@@ -11,20 +11,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     // تسجيل دخول المسؤول
+
     public function login(Request $request)
-    {
-        $credentials = $request->only('username', 'password');
+{
+    $admin = Admin::where('username', $request->username)->first();
 
-        if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Login successful.']);
-        }
-
-        return response()->json(['message' => 'Invalid credentials.'], 401);
+    if ($admin && Hash::check($request->password, $admin->password)) {
+        Auth::login($admin);
+        return response()->json(['message' => 'Login successful.']);
     }
+
+    return response()->json(['message' => 'Invalid credentials.'], 401);
+}
 
     // تسجيل الخروج
     public function logout()
