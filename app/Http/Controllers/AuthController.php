@@ -14,26 +14,37 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
-    // تسجيل دخول المسؤول
-
+    // تسجيل دخول المسؤول (Login)
     public function login(Request $request)
-{
-    $admin = Admin::where('username', $request->username)->first();
+    {
+        $credentials = $request->only('username', 'password');
+      
+        $admin = Admin::where('username', $request->username)->first();
 
-    if ($admin && Hash::check($request->password, $admin->password)) {
-        Auth::login($admin);
-        return response()->json(['message' => 'Login successful.']);
+        if ($admin && Hash::check($request->password, $admin->password)) {
+            Auth::login($admin);
+
+            $token = JWTAuth::fromUser($admin);
+
+            return response()->json([
+                'message' => 'Login successful.',
+                'token' => $token,
+            ]);
+        }
+
+        return response()->json(['message' => 'Invalid credentials.'], 401);
     }
 
-    return response()->json(['message' => 'Invalid credentials.'], 401);
-}
-
-    // تسجيل الخروج
+    // تسجيل الخروج (Logout)
     public function logout()
     {
-        Auth::logout();
+        // Invalidate the JWT token
+        JWTAuth::invalidate(JWTAuth::getToken());
+
+        // Return success message for logout
         return response()->json(['message' => 'Logged out successfully.']);
     }
 }
