@@ -12,7 +12,8 @@ namespace App\Http\Controllers;
 use App\Models\Participant;
 use App\Models\Team;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
+use App\Models\Admin;
 class AdminController extends Controller
 {
     // عرض جميع المشاركين
@@ -56,5 +57,16 @@ class AdminController extends Controller
         ];
         return response()->json($statistics);
     }
+        // registrastion admin
+        public function register(Request $request)
+        {
+            $admin = Admin::create([
+                'username' => $request->username,
+                'password' => Hash::make($request->password), // تشفير كلمة المرور
+            ]);
+        
+            return response()->json(['message' => 'Admin created successfully.']);
+        }
+
 }
 

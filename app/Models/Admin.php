@@ -16,7 +16,8 @@ class Admin extends Authenticatable implements JWTSubject
         'username',
         'password',
     ];
-
+    
+    public $timestamps = false; 
     // لا تحتاج إلى `timestamps`  مفعلة  افتراضي
 
     /**
