@@ -11,11 +11,8 @@ class CreateTeamsTable extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->string('team_name', 100);
-            $table->string('team_id', 50)->unique();
+            $table->string('status', 20)->default('pending');
             $table->unsignedBigInteger('leader_id')->nullable();
-            $table->timestamps();
-
-            $table->foreign('leader_id')->references('id')->on('participants')->onDelete('cascade');
         });
     }
 

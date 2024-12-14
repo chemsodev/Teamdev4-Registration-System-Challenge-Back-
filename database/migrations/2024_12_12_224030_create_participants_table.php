@@ -15,10 +15,10 @@ class CreateParticipantsTable extends Migration
             $table->string('phone', 15);
             $table->unsignedBigInteger('team_id')->nullable();
             $table->boolean('is_leader')->default(false);
-            $table->timestamps();
-
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+        
+            // Add foreign key later
         });
+        
     }
 
     public function down()

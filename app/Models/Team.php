@@ -25,7 +25,7 @@
          'status',  // إضافة status هنا
      ];
  
-     public $timestamps = true;
+     public $timestamps = false;
  
      // العلاقة مع القائد
      public function leader()

@@ -19,7 +19,7 @@ class Participant extends Model
         'is_leader',
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     // العلاقة مع الفريق
     public function team()

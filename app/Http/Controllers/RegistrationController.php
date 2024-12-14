@@ -8,19 +8,18 @@
  * - يحتوي على التحقق من البيانات المدخلة (Validation) وحفظ المستخدم في قاعدة البيانات.
  * 
  */
-
 namespace App\Http\Controllers;
 
 use App\Models\Participant;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
 {
-    // تسجيل رئيس فريق
+    // Register Team Leader
     public function registerTeamLeader(Request $request)
     {
-        // التحقق من صحة البيانات المدخلة
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:participants,email',
@@ -28,68 +27,56 @@ class RegistrationController extends Controller
             'team_name' => 'required|string|max:100',
         ]);
 
-        // إنشاء الفريق مع تعيين الحالة إلى "pending" بشكل افتراضي
-        $team = Team::create([
-            'team_name' => $validated['team_name'],
-            'status' => 'pending',  // تعيين الحالة الافتراضية "pending"
-        ]);
+        try {
+            $team = Team::create([
+                'team_name' => $validated['team_name'],
+                'status' => 'pending',
+            ]);
 
-        // إنشاء رئيس الفريق
-        $leader = Participant::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'team_id' => $team->id,
-            'is_leader' => true,
-        ]);
-
-        // إرسال ID الفريق لرئيس الفريق
-        return response()->json([
-            'message' => 'Team leader registered successfully.',
-            'team_id' => $team->id,
-            'team_status' => $team->status,  // إرسال حالة الفريق في الاستجابة
-        ]);
+            $leader = Participant::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'team_id' => $team->id,
+                'is_leader' => true,
+            ]);
+            $team->leader_id = $leader->id;
+            $team->save(); 
+            return response()->json([
+                'message' => 'Team leader registered successfully.',
+                'team_id' => $team->id,
+                'team_status' => $team->status,
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error("Error in registerTeamLeader: " . $e->getMessage());
+            return response()->json(['message' => 'Error while registering team leader.'], 500);
+        }
     }
 
-    // تسجيل عضو فريق
+    // Register Team Member
     public function registerTeamMember(Request $request)
     {
-        // التحقق من صحة البيانات المدخلة
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:participants,email',
             'phone' => 'required|string|max:15',
-            'team_id' => 'required|exists:teams,id'
+            'team_id' => 'required|exists:teams,id',
         ]);
 
-        // إنشاء العضو
-        $member = Participant::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'team_id' => $validated['team_id'],
-            'is_leader' => false,
-        ]);
+        try {
+            
+            $member = Participant::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'team_id' => $validated['team_id'],
+                'is_leader' => false,
+            ]);
 
-        return response()->json(['message' => 'Team member registered successfully.']);
-    }
-
-    // تحديث حالة الفريق (للمستقبل إذا كنت بحاجة لتغيير الحالة)
-    public function updateTeamStatus(Request $request, $team_id)
-    {
-        // التحقق من صحة البيانات المدخلة
-        $validated = $request->validate([
-            'status' => 'required|in:pending,accepted,refused',
-        ]);
-
-        // البحث عن الفريق وتحديث حالته
-        $team = Team::findOrFail($team_id);
-        $team->update(['status' => $validated['status']]);
-
-        return response()->json([
-            'message' => 'Team status updated successfully.',
-            'team_id' => $team->id,
-            'team_status' => $team->status,
-        ]);
+            return response()->json(['message' => 'Team member registered successfully.'], 201);
+        } catch (\Exception $e) {
+            Log::error("Error in registerTeamMember: " . $e->getMessage());
+            return response()->json(['message' => 'Error while registering team member.'], 500);
+        }
     }
 }
