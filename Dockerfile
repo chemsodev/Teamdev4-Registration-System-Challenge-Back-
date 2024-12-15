@@ -28,9 +28,8 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Copy the custom PHP-FPM configuration
-# Ensure you have a valid path to the www.conf file
-COPY ./config/www.conf /usr/local/etc/php-fpm.d/www.conf
+# Create a custom PHP-FPM configuration
+COPY ./www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Expose port 8080 for your application
 EXPOSE 8080
