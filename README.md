@@ -1,9 +1,12 @@
-# Étapes pour exécuter le projet
-
-1. Copiez le fichier .env.example  dans .env:
-
-2. Mettez à jour le fichier .env avec les informations de votre base de données.
-
-3. Créez la base de données manuellement à l'aide de MySQL :
-
-4. Installez les packages requis :
+# Registration-System-Challenge-Back
+## Steps to run
+**open terminal in your pc**
+### Run the following commands:
+```bash
+git clone https://github.com/chemsodev/Teamdev4-Registration-System-Challenge-Back-
+cd Teamdev4-Registration-System-Challenge-Back-
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan serve
+```
