@@ -28,6 +28,8 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Expose port 8080 and start PHP-FPM
+# Expose port 8080 for your application
 EXPOSE 8080
-CMD ["php-fpm"]
+
+# Start PHP-FPM and keep it running
+CMD ["php-fpm", "-F"]
