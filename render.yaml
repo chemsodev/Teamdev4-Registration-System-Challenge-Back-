@@ -10,19 +10,47 @@ services:
       php artisan view:cache
     startCommand: php artisan serve --host 0.0.0.0 --port 10000
     envVars:
+      - key: APP_NAME
+        value: Laravel
       - key: APP_ENV
         value: production
       - key: APP_KEY
-        value: base64:your_app_key_here
+        value: base64:vFcjr9bD6gw2evlYToT36xVhXwNkb2FHKse9W7AKZek=
+      - key: APP_DEBUG
+        value: false
+      - key: APP_TIMEZONE
+        value: UTC
+      - key: APP_URL
+        value: https://your-app-url.render.com
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        value: your_database_host
+        value: mysql-3b611b48-chemsoc16-df84.e.aivencloud.com
       - key: DB_PORT
-        value: 3306
+        value: 27421
       - key: DB_DATABASE
-        value: your_database_name
+        value: defaultdb
       - key: DB_USERNAME
-        value: your_database_user
+        value: avnadmin
       - key: DB_PASSWORD
-        value: your_database_password
+        value: AVNS_RCwmvvzS71RaRRyb_Yk
+      - key: DB_SSLMODE
+        value: require
+      - key: MYSQL_ATTR_SSL_CA
+        value: storage/certs/ca.pem
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: SESSION_DRIVER
+        value: file
+      - key: MAIL_MAILER
+        value: log
+      - key: MAIL_FROM_ADDRESS
+        value: hello@example.com
+      - key: MAIL_FROM_NAME
+        value: "${APP_NAME}"
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: debug
