@@ -31,8 +31,8 @@ RUN chown -R www-data:www-data /var/www/html
 # Create a custom PHP-FPM configuration
 COPY ./config/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-# Expose port 8080 for your application
-EXPOSE 8080
+# Expose port 80 for your application
+EXPOSE 80
 
 # Start PHP-FPM in the foreground
 CMD ["php-fpm", "-F"]
